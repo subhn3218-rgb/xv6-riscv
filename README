@@ -2,6 +2,60 @@ xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern RISC-V multiprocessor using ANSI C.
 
+ADDED MODULES
+
+This kernel is extended with 10 new modules. Nine are written in C and
+one (Module 9) is written in Rust.
+
+Module 1: Multitasking and Process Information
+  - Many processes run at the same time using timer-based preemption.
+  - "ps" system call lists every process with its pid, state, name and
+    memory size.
+  - "getppid" system call returns the parent process id.
+
+Module 2: CPU Scheduling
+  - Round-robin scheduling (default).
+  - Priority scheduling: "setpriority" system call changes a process
+    priority.
+  - Lottery scheduling: "settickets" system call gives a process more
+    or fewer tickets.
+
+Module 3: System Call Extensions
+  - "trace" system call prints the system calls made by a process.
+  - "sysinfo" system call reports free memory and number of running
+    processes.
+
+Module 4: Lazy Page Allocation
+  - Heap memory (sbrk) is allocated only when a page is first used.
+  - The page-fault handler allocates the missing page on demand.
+
+Module 5: Synchronization
+  - Counting semaphores: sem_open, sem_wait, sem_post.
+  - Waiting processes sleep instead of wasting CPU time.
+  - Producer-consumer example program.
+
+Module 6: Inter-Process Communication
+  - Message queues: mq_send and mq_recv.
+  - A process waits (blocks) when the queue is empty or full.
+
+Module 7: Large Files
+  - Double-indirect blocks in the file system.
+  - Maximum file size grows from about 268 KB to about 64 MB.
+
+Module 8: Symbolic Links
+  - "symlink" system call creates a link to another file.
+  - Links are followed automatically when a file is opened.
+  - Link loops are detected and rejected.
+
+Module 9: Kernel Log Buffer (written in Rust)
+  - A no_std Rust library linked into the C kernel.
+  - Stores the latest kernel messages in a fixed-size ring buffer.
+  - "dmesg" system call and command print the saved kernel messages.
+
+Module 10: User Utilities
+  - New commands: ps, free, sleep, uptime.
+  - "demo" program that runs a short test of the modules.
+
 ACKNOWLEDGMENTS
 
 xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
